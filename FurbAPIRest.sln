@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FurbAPIRest", "FurbAPIRest\FurbAPIRest.csproj", "{FD1CA077-CA12-4B4F-A685-BC556FDF67CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD1CA077-CA12-4B4F-A685-BC556FDF67CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1CA077-CA12-4B4F-A685-BC556FDF67CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1CA077-CA12-4B4F-A685-BC556FDF67CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1CA077-CA12-4B4F-A685-BC556FDF67CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1CFC6E2F-A4C1-47F0-BE49-2EFF241C747C}
+	EndGlobalSection
+EndGlobal
