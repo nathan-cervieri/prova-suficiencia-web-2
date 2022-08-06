@@ -1,7 +1,7 @@
-﻿using FurbAPIRest.Model;
+﻿using FurbAPIRest.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FurbAPIRest
+namespace FurbAPIRest.Helpers
 {
 #nullable disable
     public class DataContext : DbContext
@@ -16,7 +16,9 @@ namespace FurbAPIRest
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to sql server with connection string from app settings
-            options.UseSqlServer(Configuration.GetConnectionString("sqlConnectionString"));
+            options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(Configuration.GetConnectionString("sqlConnectionString"));
         }
 
         public DbSet<Comanda> Comandas { get; set; }

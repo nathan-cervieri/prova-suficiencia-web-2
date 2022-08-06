@@ -1,5 +1,5 @@
-﻿using FurbAPIRest.Service;
-using Microsoft.AspNetCore.Http;
+﻿using FurbAPIRest.Contracts.Comanda;
+using FurbAPIRest.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FurbAPIRest.Controllers
@@ -16,79 +16,44 @@ namespace FurbAPIRest.Controllers
         }
 
         [HttpGet("Comandas")]
-        public ActionResult Comandas()
+        public ActionResult GetComandas()
         {
-            var teste = _comandaService.GetComandas();
-            return Ok(teste);
+            var comandas = _comandaService.GetComandas();
+            return Ok(comandas);
         }
 
-        [HttpGet("Comanda/{id}")]
-        public ActionResult Details(int id)
+        [HttpGet("Comandas/{id}")]
+        public ActionResult GetComandaDetails(long id)
         {
-            return View();
+            var comanda = _comandaService.GetComandaDto(id);
+            return Ok(comanda);
         }
 
-        // GET: ComandaController/Create
-        public ActionResult Create()
+        [HttpPost("Comandas")]
+        public ActionResult PostComanda([FromBody] ComandaPostContract comanda)
         {
-            return View();
+            var newComanda = _comandaService.PostComanda(comanda);
+            return Ok(newComanda);
         }
 
-        // POST: ComandaController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpPut("Comandas/{id}")]
+        public ActionResult EditComanda(long id, [FromBody] ComandaPutContract comandaAtualizar)
         {
-            try
+            var comanda = _comandaService.UpdateComanda(id, comandaAtualizar);
+            return Ok(comanda);
+        }
+
+        [HttpDelete("Comandas/{id}")]
+        public ActionResult DeleteComanda(long id)
+        {
+            _comandaService.DeleteComanda(id);
+            return Ok(new
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ComandaController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ComandaController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ComandaController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ComandaController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                success = new
+                {
+                    text = "Comanda Removida"
+                }
+            });
         }
     }
 }

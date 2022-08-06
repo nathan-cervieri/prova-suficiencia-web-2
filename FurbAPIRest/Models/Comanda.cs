@@ -1,5 +1,4 @@
-﻿
-namespace FurbAPIRest.Model
+﻿namespace FurbAPIRest.Models
 {
 #nullable disable
     public class Comanda : IEntity
@@ -7,7 +6,7 @@ namespace FurbAPIRest.Model
         public long Id { get; set; }
 
         public long UsuarioId { get; set; }
-        public Usuario Usuario { get; set; } = new Usuario();
+        public virtual Usuario Usuario { get; set; }
 
         public virtual ICollection<Produto> ProdutosComanda { get; set; }
     }

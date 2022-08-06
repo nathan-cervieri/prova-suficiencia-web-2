@@ -1,4 +1,4 @@
-﻿namespace FurbAPIRest.Model
+﻿namespace FurbAPIRest.Models
 {
 
 #nullable disable

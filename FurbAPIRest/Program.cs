@@ -1,3 +1,4 @@
+using FurbAPIRest.Helpers;
 using FurbAPIRest.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,11 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<FurbAPIRest.DataContext>();
+builder.Services.AddDbContext<DataContext>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ComandaService>();
 
 var app = builder.Build();
