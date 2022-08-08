@@ -1,4 +1,5 @@
-﻿using FurbAPIRest.Helpers;
+﻿using FurbAPIRest.DTO.Usuarios;
+using FurbAPIRest.Helpers;
 using FurbAPIRest.Models;
 using System.Data.Entity.Core;
 
@@ -14,9 +15,9 @@ namespace FurbAPIRest.Service
             _dataContext = dataContext;
         }
 
-        public List<Usuario> GetUsuarios()
+        public List<UsuariosGetDto> GetUsuarios()
         {
-            return _dataContext.Usuarios.ToList();
+            return _dataContext.Usuarios.Select(u => new UsuariosGetDto(u)).ToList();
         }
 
         public Usuario GetUsuario(long id)
@@ -30,7 +31,14 @@ namespace FurbAPIRest.Service
             return usuario;
         }
 
-        public Usuario CreateUsuario(string nomeUsuario, string telefoneUsuario)
+        public UsuariosGetDto GetUsuarioDto(long id)
+        {
+            var usuario = GetUsuario(id);
+
+            return new UsuariosGetDto(usuario);
+        }
+
+        public UsuarioPostDto CreateUsuario(string nomeUsuario, string telefoneUsuario)
         {
             var usuario = new Usuario
             {
@@ -40,11 +48,31 @@ namespace FurbAPIRest.Service
             return CreateUsuario(usuario);
         }
 
-        public Usuario CreateUsuario(Usuario usuario)
+        public UsuarioPostDto CreateUsuario(Usuario usuario)
         {
+            ValidarUsuario(usuario);
+
             var newUsuario = _dataContext.Usuarios.Add(usuario);
             _dataContext.SaveChanges();
-            return newUsuario.Entity;
+            return new UsuarioPostDto(newUsuario.Entity);
+        }
+
+        private static void ValidarUsuario(Usuario usuario)
+        {
+            if(usuario == null)
+            {
+                throw new ArgumentNullException("Usuario não pode ser nulo");
+            }
+
+            if(string.IsNullOrWhiteSpace(usuario.Nome))
+            {
+                throw new ArgumentException("Nome do usuario não pode ser vazio");
+            }
+
+            if (string.IsNullOrWhiteSpace(usuario.TelefoneUsuario))
+            {
+                throw new ArgumentException("Telefone do usuario não pode ser vazio");
+            }
         }
     }
 }

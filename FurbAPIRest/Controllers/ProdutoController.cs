@@ -1,4 +1,5 @@
-﻿using FurbAPIRest.Models;
+﻿using FurbAPIRest.Contracts.Produto;
+using FurbAPIRest.Models;
 using FurbAPIRest.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,17 +31,17 @@ namespace FurbAPIRest.Controllers
         }
 
         [HttpPost("Produtos")]
-        public ActionResult PostProduto([FromBody] Produto produto)
+        public ActionResult PostProduto([FromBody] ProdutoPostContract produto)
         {
-            _produtoService.CreateProduto(produto);
-            return Ok();
+            var produtoInserido = _produtoService.CreateProduto(produto.Nome, produto.Preco);
+            return Ok(produtoInserido);
         }
 
         [HttpPut("Produtos")]
-        public ActionResult UpdateProduto([FromBody] Produto produto)
+        public ActionResult UpdateProduto([FromBody] ProdutoPutContract produto)
         {
-            _produtoService.UpdateProduto(produto);
-            return Ok();
+            var produtoAtualizado = _produtoService.UpdateProduto(produto);
+            return Ok(produtoAtualizado);
         }
     }
 }

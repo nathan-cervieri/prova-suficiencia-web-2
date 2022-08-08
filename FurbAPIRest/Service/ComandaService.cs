@@ -71,7 +71,7 @@ namespace FurbAPIRest.Service
             return new ComandaPostRetornoDto(comandaTracking.Entity);
         }
 
-        public Comanda UpdateComanda(long comandaId, ComandaPutContract comandaAtualizar)
+        public ComandaPutRetornoDto UpdateComanda(long comandaId, ComandaPutContract comandaAtualizar)
         {
             var comanda = GetComanda(comandaId);
 
@@ -86,7 +86,7 @@ namespace FurbAPIRest.Service
 
             _dataContext.Comandas.Update(comanda);
             _dataContext.SaveChanges();
-            return comanda;
+            return new ComandaPutRetornoDto(comanda);
         }
 
         public void DeleteComanda(long id)
@@ -94,6 +94,14 @@ namespace FurbAPIRest.Service
             var comanda = GetComanda(id);
             _dataContext.Comandas.Remove(comanda);
             _dataContext.SaveChanges();
+        }
+
+        public void ValidarComanda(Comanda comanda)
+        {
+            if(comanda == null)
+            {
+                throw new ArgumentNullException("Comanda não pode ser nula");
+            }
         }
     }
 }

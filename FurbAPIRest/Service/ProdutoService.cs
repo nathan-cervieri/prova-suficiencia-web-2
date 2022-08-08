@@ -1,4 +1,6 @@
-﻿using FurbAPIRest.Helpers;
+﻿using FurbAPIRest.Contracts.Produto;
+using FurbAPIRest.DTO.Produtos;
+using FurbAPIRest.Helpers;
 using FurbAPIRest.Models;
 using System.Data.Entity.Core;
 
@@ -13,9 +15,9 @@ namespace FurbAPIRest.Service
             _dataContext = dataContext;
         }
 
-        public List<Produto> GetProdutos()
+        public List<ProdutoRetornoDto> GetProdutos()
         {
-            return _dataContext.Produtos.ToList();
+            return _dataContext.Produtos.Select(p => new ProdutoRetornoDto(p)).ToList();
         }
 
         public Produto GetProduto(long id)
@@ -29,19 +31,14 @@ namespace FurbAPIRest.Service
             return produto;
         }
 
-        public object GetProdutoDto(long id)
+        public ProdutoRetornoDto GetProdutoDto(long id)
         {
             var produto = GetProduto(id);
 
-            return new
-            {
-                produto.Id,
-                produto.Nome,
-                produto.Preco
-            };
+            return new ProdutoRetornoDto(produto);
         }
 
-        public Produto CreateProduto(string nomeProduto, int precoProduto)
+        public ProdutoRetornoDto CreateProduto(string nomeProduto, int precoProduto)
         {
             Produto produto = new()
             {
@@ -51,23 +48,43 @@ namespace FurbAPIRest.Service
             return CreateProduto(produto);
         }
 
-        public Produto CreateProduto(Produto produto)
+        public ProdutoRetornoDto CreateProduto(Produto produto)
         {
             var novoProduto = _dataContext.Produtos.Add(produto);
             _dataContext.SaveChanges();
-            return novoProduto.Entity;
+            return new ProdutoRetornoDto(novoProduto.Entity);
         }
 
-        public Produto UpdateProduto(Produto produtoAtualizado)
+        public ProdutoRetornoDto UpdateProduto(ProdutoPutContract produtoAtualizado)
         {
             var produtoBase = GetProduto(produtoAtualizado.Id);
             produtoBase.Nome = produtoAtualizado.Nome;
             produtoBase.Preco = produtoAtualizado.Preco;
 
+            ValidarProduto(produtoBase);
+
             var produtoAlterado = _dataContext.Produtos.Update(produtoBase);
             _dataContext.SaveChanges();
 
-            return produtoAlterado.Entity;
+            return new ProdutoRetornoDto(produtoAlterado.Entity);
+        }
+
+        private static void ValidarProduto(Produto produto)
+        {
+            if (produto == null)
+            {
+                throw new ArgumentNullException("Produto não pode ser nulo");
+            }
+
+            if (string.IsNullOrWhiteSpace(produto.Nome))
+            {
+                throw new ArgumentException("Nome do produto não pode ser vazio");
+            }
+
+            if (produto.Preco <= 0)
+            {
+                throw new ArgumentException("Preço do produto não pode ser igual ou menor do que 0");
+            }
         }
     }
 }
